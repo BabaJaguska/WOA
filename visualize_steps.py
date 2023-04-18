@@ -112,34 +112,52 @@ def update_X_star(X_list, X_star, solution):
 
 
 
-#%% Streamlit app
-st.title("Whale Optimization Algorithm")
+#%% 
 
-
-# Write formulas for WOA
-st.latex(r"Spiral: \mathbf{X}_{next} = \mathbf{D} \cdot e^{m\mathbf{L}} \cdot \cos(2\pi \mathbf{L}) + \mathbf{X}^*")
-st.latex(r"Encircle: \mathbf{X}_{next} = |\mathbf{X}^* - \mathbf{A} \cdot \mathbf{D}|")
-st.latex(r"Search: \mathbf{X}_{next} = \mathbf{X}_{rand} - \mathbf{A} \cdot \mathbf{D_1}")
-
-st.latex(r"\mathbf{C} = 2 \mathbf{r1}, \mathbf{D} = |\mathbf{C} \cdot \mathbf{X}^* - \mathbf{X}|,  \mathbf{L} \sim \mathcal{U}(-1, 1)^2")
-st.latex(r"\mathbf{A} = 2 \cdot a \cdot \mathbf{r2} - a, a(t) = 2 - t \cdot \frac{2}{Max\_iter}")
-st.latex(r"\mathbf{r1},\mathbf{r2} \sim \mathcal{U}(0, 1)^2, \mathbf{D_1} = |\mathbf{C} \cdot \mathbf{X}_{rand} - \mathbf{X}|")
-
-# Setup streamlit
-col1, col2 = st.columns([1, 3])
-num_agents = st.sidebar.slider("Number of agents", 1, 10, 3)
-m = st.sidebar.slider("Coefficient m", 0.1, 10.0, 0.5)
-show_previous_states = st.sidebar.checkbox("Show previous states", value=False)
-
-colors = plt.cm.jet(np.linspace(0, 1, num_agents))
-fig, ax = plt.subplots()
+# st.beta_set_page_config(layout="wide", initial_sidebar_state="expanded", sidebar_width=400)
 
 # some constants
 lim = 100 
 solution = np.array([40, 30])
 max_iter = 100
-st.sidebar.text(f'Max_iter = {max_iter}')
-st.sidebar.latex(r"Fitness(\mathbf{X}) = (x - 40)^2 + (y - 30)^2")
+#Streamlit app
+
+st.set_page_config(page_title="Whale Optimization Algorithm Demo", page_icon=":whale:")
+st.title("Whale Optimization Algorithm")
+st.write("""
+This app demonstrates the Whale Optimization Algorithm (WOA) for optimizing a 2D function. 
+You can control the number of agents, coefficient `m`, and choose different phases to update the agents' positions.
+The agents are represented by different colored markers and their trajectories are shown on the plot.
+The current best solution (X_star) is marked with a red 'x', and the actual solution is marked with a green '*'.
+""")
+
+
+# Setup streamlit
+col1, col2 = st.columns([1, 3])
+# Add collapsible menus in the sidebar
+with st.sidebar.expander("Algorithm Parameters"):
+    num_agents = st.slider("Number of agents", 1, 10, 3)
+    m = st.slider("Coefficient m", 0.1, 10.0, 0.5)
+
+with st.sidebar.expander("Plot Options"):
+    show_previous_states = st.checkbox("Show previous states", value=False)
+    
+with st.sidebar.expander("Equations"):
+
+    
+    # Write formulas for WOA
+    st.latex(r"Spiral: \mathbf{X}_{next} = \mathbf{D} \cdot e^{m\mathbf{L}} \cdot \cos(2\pi \mathbf{L}) + \mathbf{X}^*")
+    st.latex(r"Encircle: \mathbf{X}_{next} = |\mathbf{X}^* - \mathbf{A} \cdot \mathbf{D}|")
+    st.latex(r"Search: \mathbf{X}_{next} = \mathbf{X}_{rand} - \mathbf{A} \cdot \mathbf{D_1}")
+    
+    st.latex(r"\mathbf{C} = 2 \mathbf{r1}, \mathbf{D} = |\mathbf{C} \cdot \mathbf{X}^* - \mathbf{X}|,  \mathbf{L} \sim \mathcal{U}(-1, 1)^2")
+    st.latex(r"\mathbf{A} = 2 \cdot a \cdot \mathbf{r2} - a, a(t) = 2 - t \cdot \frac{2}{Max\_iter}")
+    st.latex(r"\mathbf{r1},\mathbf{r2} \sim \mathcal{U}(0, 1)^2, \mathbf{D_1} = |\mathbf{C} \cdot \mathbf{X}_{rand} - \mathbf{X}|")
+    # st.text(f'Max_iter = {max_iter}')
+    st.latex(r"Fitness(\mathbf{X}) = (x - 40)^2 + (y - 30)^2")
+
+colors = plt.cm.jet(np.linspace(0, 1, num_agents))
+fig, ax = plt.subplots()
 
 
 #%%
