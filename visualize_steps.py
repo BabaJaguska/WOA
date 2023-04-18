@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
 # Attack phase: spiral towards current best solution
 def spiral(m, l, X_star, X):
